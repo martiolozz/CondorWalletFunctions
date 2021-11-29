@@ -10,12 +10,25 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@solana/web3.js": "^1.31.0",
+    "assert": "^2.0.0",
+    "bip39": "^3.0.4",
+    "buffer": "^6.0.3",
+    "crypto": "^1.0.1",
+    "ethers": "^5.5.1",
+    "events": "^3.3.0",
     "expo": "~43.0.2",
+    "expo-random": "^12.0.1",
     "expo-status-bar": "~1.1.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "react-native-web": "0.17.1"
+    "react-native-bip39": "^2.3.0",
+    "react-native-url-polyfill": "^1.3.0",
+    "react-native-web": "0.17.1",
+    "stream": "^0.0.2",
+    "superstruct": "^0.15.3",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
