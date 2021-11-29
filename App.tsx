@@ -1,12 +1,11 @@
-import { hexValue } from '@ethersproject/bytes';
+import { Keypair } from '@solana/web3.js';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { any } from 'superstruct';
 import "react-native-url-polyfill/auto";
 
 
-import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken } from './api';
+import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction } from './api';
 
   
 
@@ -33,10 +32,13 @@ export default function App() {
   }
 
   //Funcion para crear cuenta
-  const [account, setAccount] = useState("")
+  const [publicKey, setPublicKey] = useState("")
+  const [account, setAccount] = useState()
 
   function generarCuenta(seed) {
     createAccount(seed).then((hexValue) => {
+      console.log(hexValue.publicKey.toString())
+      setPublicKey(hexValue.publicKey.toString())
       console.log(hexValue)
       setAccount(hexValue)
     })
@@ -66,6 +68,13 @@ export default function App() {
     })
   }
 
+  async function sendToken(){
+    const send = sendTokenTransaction(account,"uja3w9XG1g6DQSVT6YASK99FVmdVwXoHVoQEgtEJdLv","7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ",1)
+    send.then((value) => {
+      console.log(value);
+    })
+  } 
+
   return (
     <View style={styles.container}>
       <Text>{mnemonic}</Text>
@@ -82,7 +91,7 @@ export default function App() {
       >
         <Text>Generar Semilla</Text>
       </TouchableOpacity>
-      <Text>{account}</Text>
+      <Text>{publicKey}</Text>
       <TouchableOpacity
         style={styles.boton}
         onPress={() => generarCuenta(seed)}
@@ -92,16 +101,22 @@ export default function App() {
       <Text>{balance}</Text>
       <TouchableOpacity
         style={styles.boton}
-        onPress={() => obtenerBalance(account)}
+        onPress={() => obtenerBalance(publicKey)}
       >
         <Text>Obtener Balance</Text>
       </TouchableOpacity>
       <Text>{tokenBalance}</Text>
       <TouchableOpacity
         style={styles.boton}
-        onPress={() => obtenerTokenB(account, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
+        onPress={() => obtenerTokenB(publicKey, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
       >
         <Text>Obtener Balance Token</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => sendToken()}
+      >
+        <Text>Enviar</Text>
       </TouchableOpacity>
     </View>
   );
