@@ -1,9 +1,15 @@
 import * as solanaWeb3 from '@solana/web3.js';
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { PublicKey } from '@solana/web3.js';
 
 import * as Random from "expo-random"
 import { ethers } from "ethers"
 import { Buffer } from "buffer"
 import nacl from "tweetnacl"
+
+//variables
+const SPL_TOKEN = "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ"
+const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new solanaWeb3.PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 
 async function generateMnemonic() {
     const randomBytes = await Random.getRandomBytesAsync(16);
@@ -38,5 +44,36 @@ async function getBalance(publicKey: string) {
     })
 }
 
+async function findAssociatedTokenAddress(
+    walletAddress: PublicKey,
+    tokenMintAddress: PublicKey
+  ): Promise<PublicKey> {
+    return (
+      await solanaWeb3.PublicKey.findProgramAddress(
+        [
+          walletAddress.toBuffer(),
+          TOKEN_PROGRAM_ID.toBuffer(),
+          tokenMintAddress.toBuffer(),
+        ],
+        SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID
+      )
+    )[0];
+  }
 
-export { generateMnemonic, mnemonicToSeed, createAccount, getBalance }
+async function getToken(publicKey: string, splToken: string){
+    const connection = createConnection();
+
+  const account = await findAssociatedTokenAddress(new PublicKey(publicKey), new PublicKey(splToken)
+  );
+
+  try {
+    const balance = await connection.getTokenAccountBalance(
+      new PublicKey(account.toString())
+    );
+    return balance.value.amount;
+  } catch (e) {
+    return 0;
+  }
+}
+
+export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken }

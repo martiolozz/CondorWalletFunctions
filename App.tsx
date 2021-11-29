@@ -6,7 +6,7 @@ import { any } from 'superstruct';
 import "react-native-url-polyfill/auto";
 
 
-import { generateMnemonic, mnemonicToSeed, createAccount, getBalance } from './api';
+import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken } from './api';
 
   
 
@@ -46,13 +46,23 @@ export default function App() {
   //Funcion obtener balance
   const [balance, setBalance] = useState(0)
 
-  async function obtenerBalance(publicKey) {
+  async function obtenerBalance(publicKey: string) {
     getBalance(publicKey).then((value) => {
       console.log(value)
       setBalance(value)
     }).catch((error) => {
       console.log(error);
       return "error"
+    })
+  }
+
+  //Funcion de obtener splToken
+  const [tokenBalance, setTokenBalance] = useState(0)
+
+  async function obtenerTokenB(publicKey:string, mint:string) {
+    const bala = getToken(publicKey, mint).then((value) => {
+      setTokenBalance(value)
+      console.log(value);
     })
   }
 
@@ -86,6 +96,13 @@ export default function App() {
       >
         <Text>Obtener Balance</Text>
       </TouchableOpacity>
+      <Text>{tokenBalance}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => obtenerTokenB(account, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
+      >
+        <Text>Obtener Balance Token</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -96,6 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    margin: 30
   },
   boton: {
     marginTop: 50
