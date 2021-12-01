@@ -10,14 +10,15 @@ import nacl from "tweetnacl"
 //variables
 const SPL_TOKEN = "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ"
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new solanaWeb3.PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
-const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL
+const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL                                                                     
 
+//generar mnemonic
 async function generateMnemonic() {
     const randomBytes = await Random.getRandomBytesAsync(16);
     const mnemonic = ethers.utils.entropyToMnemonic(randomBytes);
     return mnemonic
 }
-
+//mnemonic a semilla
 const mnemonicToSeed = async (mnemonic: string) => {
     try {
         return ethers.utils.mnemonicToSeed(mnemonic).toString()
@@ -27,17 +28,26 @@ const mnemonicToSeed = async (mnemonic: string) => {
     }
 };
 
+//crear ceunta
 async function createAccount(seed: string) {
+    //var RNFS = require('react-native-fs');  
+    //var path = RNFS.DocumentDirectoryPath + '/test.txt';
+    
     const hex = Uint8Array.from(Buffer.from(seed))
     const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
     const acc = new solanaWeb3.Account(keyPair.secretKey);
+    
+  //falta crear metodo para guardar la key!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
     return acc
 }
 
+//crear conexion
 function createConnection() {
     return new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"))
 }
 
+//obtener balance de Solanas
 async function getBalance(publicKey: string) {
     const connection = createConnection()
     return await connection.getBalance(new solanaWeb3.PublicKey(publicKey)).catch((err) => {
@@ -45,6 +55,7 @@ async function getBalance(publicKey: string) {
     })
 }
 
+//buscar cuentas asociadas a tokens
 async function findAssociatedTokenAddress(
     walletAddress: PublicKey,
     tokenMintAddress: PublicKey
@@ -61,22 +72,20 @@ async function findAssociatedTokenAddress(
     )[0];
   }
 
+//obtener balance del token
 async function getToken(publicKey: string, splToken: string){
-    const connection = createConnection();
-
-  const account = await findAssociatedTokenAddress(new PublicKey(publicKey), new PublicKey(splToken)
-  );
+    const connection = createConnection()
+    const account = await findAssociatedTokenAddress(new PublicKey(publicKey), new PublicKey(splToken))
 
   try {
-    const balance = await connection.getTokenAccountBalance(
-      new PublicKey(account.toString())
-    );
-    return balance.value.amount;
+    const balance = await connection.getTokenAccountBalance(new PublicKey(account.toString()))
+    return balance.value.amount
   } catch (e) {
-    return 0;
+    return 0
   }
-}
 
+}
+//enviar transaccion
 async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string, splToken: string, amount: number) {
   const connection = createConnection()
   const DEMO_WALLET_SECRET_KEY = new Uint8Array(wallet.secretKey)
@@ -111,13 +120,13 @@ async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string
       )
     )
   
-    var signature = await solanaWeb3.sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [fromWallet]
-    );
-    console.log("SIGNATURE", signature);
-    console.log("SUCCESS");
+  var signature = await solanaWeb3.sendAndConfirmTransaction(
+    connection,
+    transaction,
+    [fromWallet]
+  );
+  console.log("SIGNATURE", signature);
+  console.log("SUCCESS");
   
 }
 
