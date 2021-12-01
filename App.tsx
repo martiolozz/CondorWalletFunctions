@@ -8,7 +8,7 @@ import "react-native-url-polyfill/auto";
 import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction } from './api';
 
 //screens
-import Home from './src/screens/Home';
+import Crearcuenta from './src/screens/Crearcuenta';
 
   
 
@@ -81,7 +81,7 @@ export default function App() {
 
   return (
     
-    <Home/>
+    <Crearcuenta/>
     // <View style={styles.container}>
     //   <Text>{mnemonic}</Text>
     //   <TouchableOpacity
