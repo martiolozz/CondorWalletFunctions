@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import "react-native-url-polyfill/auto";
 
 
-import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction } from './api';
+import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey } from './api';
 
 //screens
 import Crearcuenta from './src/screens/Crearcuenta';
@@ -81,50 +81,50 @@ export default function App() {
 
   return (
     
-    <Crearcuenta/>
-    // <View style={styles.container}>
-    //   <Text>{mnemonic}</Text>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => generarMnemonic()}
-    //   >
-    //     <Text>Generar Mnemonic</Text>
-    //   </TouchableOpacity>
-    //   <Text>{seed}</Text>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => generarSeed(mnemonic)}
-    //   >
-    //     <Text>Generar Semilla</Text>
-    //   </TouchableOpacity>
-    //   <Text>{publicKey}</Text>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => generarCuenta(seed)}
-    //   >
-    //     <Text>Crear Cuenta</Text>
-    //   </TouchableOpacity>
-    //   <Text>{balance}</Text>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => obtenerBalance(publicKey)}
-    //   >
-    //     <Text>Obtener Balance</Text>
-    //   </TouchableOpacity>
-    //   <Text>{tokenBalance}</Text>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => obtenerTokenB(publicKey, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
-    //   >
-    //     <Text>Obtener Balance Token</Text>
-    //   </TouchableOpacity>
-    //   <TouchableOpacity
-    //     style={styles.boton}
-    //     onPress={() => sendToken()}
-    //   >
-    //     <Text>Enviar</Text>
-    //   </TouchableOpacity>
-    // </View>
+    //<Crearcuenta/>
+    <View style={styles.container}>
+      <Text>{mnemonic}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => generarMnemonic()}
+      >
+        <Text>Generar Mnemonic</Text>
+      </TouchableOpacity>
+      <Text>{seed}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => generarSeed(mnemonic)}
+      >
+        <Text>Generar Semilla</Text>
+      </TouchableOpacity>
+      <Text>{publicKey}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => generarCuenta(seed)}
+      >
+        <Text>Crear Cuenta</Text>
+      </TouchableOpacity>
+      <Text>{balance}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => obtenerBalance(publicKey)}
+      >
+        <Text>Obtener Balance</Text>
+      </TouchableOpacity>
+      <Text>{tokenBalance}</Text>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => obtenerTokenB(publicKey, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
+      >
+        <Text>Obtener Balance Token</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => sendToken()}
+      >
+        <Text>Enviar</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 

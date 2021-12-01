@@ -2,6 +2,8 @@ import * as solanaWeb3 from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
 import { PublicKey } from '@solana/web3.js';
 
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
+
 import * as Random from "expo-random"
 import { ethers } from "ethers"
 import { Buffer } from "buffer"
@@ -11,6 +13,29 @@ import nacl from "tweetnacl"
 const SPL_TOKEN = "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ"
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new solanaWeb3.PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL                                                                     
+
+
+//Funcion guardar llave
+async function saveKey(data){
+  try {    
+    console.log("KEY:");
+    console.log(await AsyncStorage.setItem('@storage_Key', data))  
+  } catch (e) { 
+       // saving error  
+  }
+}
+
+//Funcion guardar llave
+async function readKey(){
+  //obteniendo llave
+  try {    
+    console.log("READ KEY:");
+    console.log(await AsyncStorage.getItem('@storage_Key'))  
+  } catch (e) { 
+       // saving error  
+  }
+}
+
 
 //generar mnemonic
 async function generateMnemonic() {
@@ -28,17 +53,12 @@ const mnemonicToSeed = async (mnemonic: string) => {
     }
 };
 
-//crear ceunta
+//crear cuenta
 async function createAccount(seed: string) {
-    //var RNFS = require('react-native-fs');  
-    //var path = RNFS.DocumentDirectoryPath + '/test.txt';
-    
     const hex = Uint8Array.from(Buffer.from(seed))
     const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
     const acc = new solanaWeb3.Account(keyPair.secretKey);
-    
-  //falta crear metodo para guardar la key!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
+    saveKey(acc.secretKey)   
     return acc
 }
 
@@ -50,6 +70,7 @@ function createConnection() {
 //obtener balance de Solanas
 async function getBalance(publicKey: string) {
     const connection = createConnection()
+    readKey()
     return await connection.getBalance(new solanaWeb3.PublicKey(publicKey)).catch((err) => {
         console.log(err);
     })
@@ -130,4 +151,4 @@ async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string
   
 }
 
-export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction }
+export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey }
