@@ -8,16 +8,18 @@ import { Buffer } from "buffer"
 import nacl from "tweetnacl"
 
 //variables
+//token del min
 const SPL_TOKEN = "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ"
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new solanaWeb3.PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL
 
+//generador 12 palabras
 async function generateMnemonic() {
     const randomBytes = await Random.getRandomBytesAsync(16);
     const mnemonic = ethers.utils.entropyToMnemonic(randomBytes);
     return mnemonic
 }
-
+//generador semilla
 const mnemonicToSeed = async (mnemonic: string) => {
     try {
         return ethers.utils.mnemonicToSeed(mnemonic).toString()
@@ -26,7 +28,7 @@ const mnemonicToSeed = async (mnemonic: string) => {
         return "error"
     }
 };
-
+//generador crear cuenta
 async function createAccount(seed: string) {
     const hex = Uint8Array.from(Buffer.from(seed))
     const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
@@ -37,14 +39,14 @@ async function createAccount(seed: string) {
 function createConnection() {
     return new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"))
 }
-
+//obtener balance solana
 async function getBalance(publicKey: string) {
     const connection = createConnection()
     return await connection.getBalance(new solanaWeb3.PublicKey(publicKey)).catch((err) => {
         console.log(err);
     })
 }
-
+//buscar cuenta asociada
 async function findAssociatedTokenAddress(
     walletAddress: PublicKey,
     tokenMintAddress: PublicKey
@@ -60,7 +62,7 @@ async function findAssociatedTokenAddress(
       )
     )[0];
   }
-
+//obtener balance token
 async function getToken(publicKey: string, splToken: string){
     const connection = createConnection();
 
@@ -76,7 +78,7 @@ async function getToken(publicKey: string, splToken: string){
     return 0;
   }
 }
-
+//enviar transacción del token
 async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string, splToken: string, amount: number) {
   const connection = createConnection()
   const DEMO_WALLET_SECRET_KEY = new Uint8Array(wallet.secretKey)

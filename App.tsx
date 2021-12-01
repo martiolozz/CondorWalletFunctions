@@ -7,10 +7,10 @@ import "react-native-url-polyfill/auto";
 
 import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction } from './api';
 
-  
+// Screens
+import Home from './src/screens/Home';
 
 export default function App() { 
-
   //Funcion de generar 12 palabras
   const [mnemonic, setMnemonic] = useState("")
 
@@ -76,50 +76,51 @@ export default function App() {
   } 
 
   return (
-    <View style={styles.container}>
-      <Text>{mnemonic}</Text>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => generarMnemonic()}
-      >
-        <Text>Generar Mnemonic</Text>
-      </TouchableOpacity>
-      <Text>{seed}</Text>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => generarSeed(mnemonic)}
-      >
-        <Text>Generar Semilla</Text>
-      </TouchableOpacity>
-      <Text>{publicKey}</Text>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => generarCuenta(seed)}
-      >
-        <Text>Crear Cuenta</Text>
-      </TouchableOpacity>
-      <Text>{balance}</Text>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => obtenerBalance(publicKey)}
-      >
-        <Text>Obtener Balance</Text>
-      </TouchableOpacity>
-      <Text>{tokenBalance}</Text>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => obtenerTokenB(publicKey, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
-      >
-        <Text>Obtener Balance Token</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => sendToken()}
-      >
-        <Text>Enviar</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    // <View style={styles.container}>
+    //   <Text>{mnemonic}</Text>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => generarMnemonic()}
+    //   >
+    //     <Text>Generar Mnemonic</Text>
+    //   </TouchableOpacity>
+    //   <Text>{seed}</Text>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => generarSeed(mnemonic)}
+    //   >
+    //     <Text>Generar Semilla</Text>
+    //   </TouchableOpacity>
+    //   <Text>{publicKey}</Text>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => generarCuenta(seed)}
+    //   >
+    //     <Text>Crear Cuenta</Text>
+    //   </TouchableOpacity>
+    //   <Text>{balance}</Text>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => obtenerBalance(publicKey)}
+    //   >
+    //     <Text>Obtener Balance</Text>
+    //   </TouchableOpacity>
+    //   <Text>{tokenBalance}</Text>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => obtenerTokenB(publicKey, "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ")}
+    //   >
+    //     <Text>Obtener Balance Token</Text>
+    //   </TouchableOpacity>
+    //   <TouchableOpacity
+    //     style={styles.boton}
+    //     onPress={() => sendToken()}
+    //   >
+    //     <Text>Enviar</Text>
+    //   </TouchableOpacity>
+    // </View>
+    <Home />
+ );
 }
 
 const styles = StyleSheet.create({
