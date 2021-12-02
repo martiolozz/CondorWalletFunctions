@@ -36,6 +36,27 @@ async function readKey(){
   }
 }
 
+//Funcion guardar contra
+async function savePassword(data){
+  try {    
+    console.log("PASSWORD:");
+    console.log(await AsyncStorage.setItem('@storage_Pass', data))  
+  } catch (e) { 
+       // saving error  
+  }
+}
+
+//Funcion guardar contra
+async function readPassword(){
+  //obteniendo contra
+  try {    
+    console.log("READ PASSWORD:");
+    console.log(await AsyncStorage.getItem('@storage_Pass'))  
+  } catch (e) { 
+       // saving error  
+  }
+}
+
 
 //generar mnemonic
 async function generateMnemonic() {
@@ -58,7 +79,7 @@ async function createAccount(seed: string) {
     const hex = Uint8Array.from(Buffer.from(seed))
     const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
     const acc = new solanaWeb3.Account(keyPair.secretKey);
-    saveKey(acc.secretKey)   
+    saveKey(acc.publicKey.toString())   
     return acc
 }
 
@@ -151,4 +172,4 @@ async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string
   
 }
 
-export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey }
+export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken, sendTokenTransaction, saveKey, readKey }
