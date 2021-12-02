@@ -14,6 +14,7 @@ const SPL_TOKEN = "7TMzmUe9NknkeS3Nxcx6esocgyj8WdKyEMny9myDGDYJ"
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new solanaWeb3.PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL                                                                     
 
+//
 
 //Funcion guardar llave
 async function saveKey(data){
@@ -25,12 +26,13 @@ async function saveKey(data){
   }
 }
 
-//Funcion guardar llave
+//Funcion leer llave
 async function readKey(){
   //obteniendo llave
   try {    
     console.log("READ KEY:");
-    console.log(await AsyncStorage.getItem('@storage_Key'))  
+    const key = await AsyncStorage.getItem('@storage_Key')
+    console.log(key)  
   } catch (e) { 
        // saving error  
   }
@@ -41,6 +43,7 @@ async function readKey(){
 async function generateMnemonic() {
     const randomBytes = await Random.getRandomBytesAsync(16);
     const mnemonic = ethers.utils.entropyToMnemonic(randomBytes);
+    saveKey(mnemonic)     
     return mnemonic
 }
 //mnemonic a semilla
@@ -58,19 +61,17 @@ async function createAccount(seed: string) {
     const hex = Uint8Array.from(Buffer.from(seed))
     const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
     const acc = new solanaWeb3.Account(keyPair.secretKey);
-    saveKey(acc.secretKey)   
     return acc
 }
 
 //crear conexion
-function createConnection() {
-    return new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"))
+function createConnection(cluster:string) {
+    return new solanaWeb3.Connection(solanaWeb3.clusterApiUrl(cluster))
 }
 
 //obtener balance de Solanas
 async function getBalance(publicKey: string) {
-    const connection = createConnection()
-    readKey()
+    const connection = createConnection("devnet")
     return await connection.getBalance(new solanaWeb3.PublicKey(publicKey)).catch((err) => {
         console.log(err);
     })
@@ -95,7 +96,7 @@ async function findAssociatedTokenAddress(
 
 //obtener balance del token
 async function getToken(publicKey: string, splToken: string){
-    const connection = createConnection()
+    const connection = createConnection("devnet")
     const account = await findAssociatedTokenAddress(new PublicKey(publicKey), new PublicKey(splToken))
 
   try {
@@ -108,7 +109,7 @@ async function getToken(publicKey: string, splToken: string){
 }
 //enviar transaccion
 async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string, splToken: string, amount: number) {
-  const connection = createConnection()
+  const connection = createConnection("devnet")
   const DEMO_WALLET_SECRET_KEY = new Uint8Array(wallet.secretKey)
   const fromWallet = wallet
   const toWallet = new solanaWeb3.PublicKey(toPublic)
@@ -151,4 +152,4 @@ async function sendTokenTransaction(wallet: solanaWeb3.Account, toPublic: string
   
 }
 
-export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey }
+export { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey, readKey }

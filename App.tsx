@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import "react-native-url-polyfill/auto";
 
 
-import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey } from './api';
+import { generateMnemonic, mnemonicToSeed, createAccount, getBalance, getToken,sendTokenTransaction,saveKey, readKey } from './api';
 
 //screens
 import Crearcuenta from './src/screens/Crearcuenta';
@@ -30,6 +30,7 @@ export default function App() {
 
   function generarSeed(mnemonic: string) {
     mnemonicToSeed(mnemonic).then((value) => {
+      //guardar llave
       setSeed(value)
     })
   }
@@ -46,7 +47,7 @@ export default function App() {
       setAccount(hexValue)
     })
   }
-
+  
   
   //Funcion obtener balance
   const [balance, setBalance] = useState(0)
